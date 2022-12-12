@@ -1,0 +1,13 @@
+@baseUrl = http://localhost:8081
+
+### GET /subjects
+GET {{baseUrl}}/subjects 
+
+### GET /schemas
+GET {{baseUrl}}/schemas
+
+### POST /subjects/{string: subject}/versions
+POST {{baseUrl}}/subjects/test/versions
+Content-Type: application/json
+
+{"schema":"{\"type\": \"record\",\"name\": \"test\",\"fields\":[{\"type\": \"string\",\"name\": \"field1\"},{\"type\": \"int\",\"name\": \"field2\"}]}","schemaType": "AVRO"}

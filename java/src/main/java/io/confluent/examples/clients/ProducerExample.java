@@ -29,11 +29,18 @@ public class ProducerExample {
     final Properties props = new Properties();
 
     // Create topic if needed
-    final String topic = "demo.topic";
+    final String topic = "test.topic";
 
     // Add additional properties.
-    props.put(ProducerConfig.ACKS_CONFIG, "all");
-    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+    props.put(ProducerConfig.ACKS_CONFIG, "-1");
+    props.put(ProducerConfig.RETRIES_CONFIG, 1);
+    props.put(ProducerConfig.RETRY_BACKOFF_MS_CONFIG, 1000);
+    props.put(ProducerConfig.REQUEST_TIMEOUT_MS_CONFIG, 1000);
+    props.put(ProducerConfig.LINGER_MS_CONFIG, 10000);
+    props.put(ProducerConfig.BATCH_SIZE_CONFIG, 10);
+    props.put(ProducerConfig.COMPRESSION_TYPE_CONFIG, "gzip");
+    props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092,localhost:9091,localhost:9093");
+    props.put(ProducerConfig.PARTITIONER_CLASS_CONFIG, RoundRobinPartitioner.class.getName());
     props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
     props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringSerializer");
 
@@ -41,13 +48,14 @@ public class ProducerExample {
     Producer<String, String> producer = new KafkaProducer<String, String>(props);
 
     // Produce sample data
-    final Long numMessages = 10L;
-    for (Long i = 0L; i < numMessages; i++) {
-      String key = "alice";
-      String record = String.valueOf(i);
+    while (true) {
+      final Long numMessages = 1L;
+      for (Long i = 0L; i < numMessages; i++) {
+        String key = "alice";
+        String record = "jklñljkñjñl" + String.valueOf(i);
 
-      System.out.printf("Producing record: %s\t%s%n", key, record);
-      producer.send(new ProducerRecord<String, String>(topic, key, record), new Callback() {
+        System.out.printf("Producing record: %s\t%s%n", key, record);
+        producer.send(new ProducerRecord<String, String>(topic, record), new Callback() {
           @Override
           public void onCompletion(RecordMetadata m, Exception e) {
             if (e != null) {
@@ -56,13 +64,18 @@ public class ProducerExample {
               System.out.printf("Produced record to topic %s partition [%d] @ offset %d%n", m.topic(), m.partition(), m.offset());
             }
           }
-      });
+        });
+        try {
+          Thread.sleep(1000);
+        } catch (Exception ex) {
+        }
+      }
     }
 
-    producer.flush();
+    /*producer.flush();
 
     System.out.printf("10 messages were produced to topic %s%n", topic);
 
-    producer.close();
+    producer.close();*/
   }
 }

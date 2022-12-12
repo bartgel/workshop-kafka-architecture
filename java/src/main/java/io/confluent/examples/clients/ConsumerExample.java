@@ -29,7 +29,7 @@ public class ConsumerExample {
 
   public static void main(final String[] args) throws Exception {
 
-    final String topic = "demo.topic";
+    final String topic = "test.topic.4";
 
 
     final Properties props = new Properties();
@@ -37,9 +37,14 @@ public class ConsumerExample {
     // Add additional properties.
     props.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
     props.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
-    props.put(ConsumerConfig.GROUP_ID_CONFIG, "demo-consumer-1");
+    props.put(ConsumerConfig.GROUP_ID_CONFIG, "my-new-consumer-5");
     props.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
+    props.put(ConsumerConfig.AUTO_OFFSET_RESET_DOC, "earliest");
     props.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
+    props.put(ConsumerConfig.MAX_POLL_INTERVAL_MS_CONFIG, 6500);
+    props.put(ConsumerConfig.SESSION_TIMEOUT_MS_CONFIG, 6000);
+
+
 
     final Consumer<String, String> consumer = new KafkaConsumer<String, String>(props);
     consumer.subscribe(Arrays.asList(topic));
@@ -49,14 +54,23 @@ public class ConsumerExample {
     try {
       while (true) {
         ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
+        //consumer.pause(consumer.assignment());
         for (ConsumerRecord<String, String> record : records) {
+
+          records.partitions().forEach(cons-> cons.partition().);
+          System.out.println(records.partitions().toString());
           String key = record.key();
           String value = record.value();
+
           total_count++;
           System.out.printf("Consumed record with key %s and value %s, and updated total count to %d%n", key, value, total_count);
         }
+
+        try {Thread.sleep(10000);} catch(Exception ex) {}
+        //consumer.resume(consumer.assignment());
       }
     } finally {
+
       consumer.close();
     }
   }
