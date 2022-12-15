@@ -57,7 +57,6 @@ public class ConsumerExample {
         //consumer.pause(consumer.assignment());
         for (ConsumerRecord<String, String> record : records) {
 
-          records.partitions().forEach(cons-> cons.partition().);
           System.out.println(records.partitions().toString());
           String key = record.key();
           String value = record.value();

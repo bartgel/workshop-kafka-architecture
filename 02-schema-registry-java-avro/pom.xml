@@ -168,11 +168,11 @@
                             <goal>schema</goal>
                         </goals>
                         <configuration>
-                            <sourceDirectory>${project.basedir}/src/main/resources/avro/io/confluent/examples/clients/cloud/</sourceDirectory>
+                            <sourceDirectory>${project.basedir}/src/main/resources/avro/io/confluent/examples/clients/basicavro/</sourceDirectory>
                             <includes>
-                                <include>DataRecordAvro.avsc</include>
+                                <include>Payment.avsc</include>
                             </includes>
-                            <outputDirectory>${project.build.directory}/generated-sources</outputDirectory>
+                            <!--outputDirectory>${project.basedir}/src/main/java/io/confluent/examples/clients/basicavro/</outputDirectory -->
                         </configuration>
                     </execution>
                 </executions>
