@@ -1,0 +1,4 @@
+POST http://localhost:8081/subjects/test-value/versions
+Accept: application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json
+
+{"schema":"{\"type\":\"record\",\"name\":\"test\",\"fields\":[{\"type\":\"string\",\"name\":\"field1\"},{\"type\":\"com.acme.Referenced\",\"name\":\"int\"}]}","schemaType":"AVRO","references":[{"name":"com.acme.Referenced","subject":"test-value","version":1}]}

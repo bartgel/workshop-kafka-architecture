@@ -1,0 +1,2 @@
+GET http://localhost:8081/subjects/transaction.json-value/versions
+Accept: application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json

@@ -1,0 +1,2 @@
+GET http://localhost:8081/schemas/types
+Accept: application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json
