@@ -20,9 +20,13 @@ public class ProducerExample {
 
     @SuppressWarnings("InfiniteLoopStatement")
     public static void main(final String[] args) throws IOException {
-
-      props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:9092");
-      props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "http://localhost:8081");
+      props.put(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, "pkc-ymrq7.us-east-2.aws.confluent.cloud:9092");
+        props.put("security.protocol","SASL_SSL" );
+        props.put("sasl.mechanism", "PLAIN");
+        props.put("sasl.jaas.config","org.apache.kafka.common.security.plain.PlainLoginModule required username='7BO7URVDMYS6VPQU' password='lmmPByIqOlsuWv5eaveLZxidnITjxAdwAqBVzGopgTRasYWP6WYTQy6rTGDHzkcD';" );
+      props.put(AbstractKafkaSchemaSerDeConfig.SCHEMA_REGISTRY_URL_CONFIG, "https://psrc-95km5.eu-central-1.aws.confluent.cloud");
+        props.put("basic.auth.credentials.source","USER_INFO");
+        props.put("basic.auth.user.info","FO7SDDHXH2YJ2AKK:iZz2fU+xmlQASU/fzv6f3kZKdwlSOJL1tpF4aEUKWYRIvfgIfEWNZZoMOq2ITpvA");
       props.put(ProducerConfig.ACKS_CONFIG, "all");
         props.put(ProducerConfig.RETRIES_CONFIG, 0);
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
@@ -36,8 +40,8 @@ public class ProducerExample {
                 producer.send(record, new Callback() {
                     @Override
                     public void onCompletion(RecordMetadata recordMetadata, Exception e) {
-                        // Do error handling
-                        //e.printStackTrace();
+                        if (e != null)
+                           e.printStackTrace();
                     }
                 });
             }

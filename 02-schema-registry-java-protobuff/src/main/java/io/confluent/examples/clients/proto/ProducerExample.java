@@ -10,6 +10,8 @@ import java.util.Properties;
 import java.io.IOException;
 import java.util.UUID;
 
+import static io.confluent.examples.clients.proto.SimpleMessageOuterClass.SimpleMessage;
+
 public class ProducerExample {
 
     private static final String TOPIC = "transaction.simple";
@@ -25,15 +27,15 @@ public class ProducerExample {
         props.put(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class);
         props.put(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, KafkaProtobufSerializer.class);
 
-        try (KafkaProducer<String, SimpleMessageOuterClass.SimpleMessage> producer = new KafkaProducer<String, SimpleMessageOuterClass.SimpleMessage>(props)) {
+        try (KafkaProducer<String, SimpleMessage> producer =
+                     new KafkaProducer<String, SimpleMessage>(props)) {
             for (long i = 0; i < 10; i++) {
-                final String orderId = "id" + Long.toString(i);
-                final SimpleMessageOuterClass.SimpleMessage payment =  SimpleMessageOuterClass.SimpleMessage.newBuilder()
+                final SimpleMessage payment =  SimpleMessage.newBuilder()
                         .setContent("aaa")
                         .setDateTime("jk")
                         .build();
-                final ProducerRecord<String, SimpleMessageOuterClass.SimpleMessage> record
-                        = new ProducerRecord<String, SimpleMessageOuterClass.SimpleMessage>(TOPIC, UUID.randomUUID().toString(), payment);
+                final ProducerRecord<String, SimpleMessage> record
+                        = new ProducerRecord<String, SimpleMessage>(TOPIC, UUID.randomUUID().toString(), payment);
                 producer.send(record, new Callback() {
                     @Override
                     public void onCompletion(RecordMetadata recordMetadata, Exception e) {

@@ -1,2 +1,2 @@
-GET http://localhost:8081/schemas/ids/1
+GET http://localhost:8081/schemas/ids/3
 Accept: application/vnd.schemaregistry.v1+json, application/vnd.schemaregistry+json, application/json
